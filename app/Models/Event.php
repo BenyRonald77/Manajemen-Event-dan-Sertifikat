@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use App\Enums\RegistrationStatus;
+use Illuminate\Bus\Batch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Bus;
 
 class Event extends Model
 {
@@ -19,6 +21,7 @@ class Event extends Model
         'starts_at',
         'ends_at',
         'quota',
+        'certificate_batch_id',
     ];
 
     protected function casts(): array
@@ -60,5 +63,18 @@ class Event extends Model
         }
 
         return max(0, $this->quota - $this->registrations()->count());
+    }
+
+    /**
+     * Ambil batch job generate sertifikat yang terakhir dijalankan untuk
+     * event ini, jika ada.
+     */
+    public function certificateBatch(): ?Batch
+    {
+        if (! $this->certificate_batch_id) {
+            return null;
+        }
+
+        return Bus::findBatch($this->certificate_batch_id);
     }
 }
