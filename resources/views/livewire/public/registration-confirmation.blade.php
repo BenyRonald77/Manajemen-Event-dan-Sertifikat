@@ -3,7 +3,7 @@
         <div class="rounded-lg border border-dashed border-slate-300 bg-white p-8 text-center">
             <h1 class="text-lg font-semibold text-slate-900">Pendaftaran tidak ditemukan</h1>
             <p class="mt-2 text-sm text-slate-600">Kode pendaftaran pada tautan ini tidak cocok dengan data kami. Periksa kembali tautan yang Anda buka, atau gunakan pencarian status pendaftaran.</p>
-            <a href="{{ route('registrations.lookup') }}" wire:navigate class="mt-4 inline-flex items-center rounded-md bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700">
+            <a href="{{ route('registrations.lookup') }}" wire:navigate class="mt-4 inline-flex items-center rounded-md bg-teal-700 min-h-[44px] px-4 py-2 text-sm font-medium text-white hover:bg-teal-800">
                 Cek status pendaftaran
             </a>
         </div>

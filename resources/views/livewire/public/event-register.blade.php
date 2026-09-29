@@ -4,7 +4,7 @@
     <div class="mt-4 rounded-lg border border-slate-200 bg-white p-6 sm:p-8">
         <h1 class="text-xl font-semibold text-slate-900">Daftar: {{ $event->name }}</h1>
         <p class="mt-1 text-sm text-slate-600">
-            {{ $event->starts_at->translatedFormat('d M Y, H:i') }} &mdash; {{ $event->ends_at->translatedFormat('d M Y, H:i') }}
+            {{ $event->starts_at->translatedFormat('d M Y, H:i') }} hingga {{ $event->ends_at->translatedFormat('d M Y, H:i') }}
         </p>
         @if ($event->location)
             <p class="text-sm text-slate-500">{{ $event->location }}</p>
@@ -63,7 +63,7 @@
                     type="submit"
                     wire:loading.attr="disabled"
                     wire:target="register"
-                    class="inline-flex w-full items-center justify-center rounded-md bg-teal-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-60 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"
+                    class="inline-flex w-full items-center justify-center rounded-md bg-teal-700 min-h-[44px] px-4 py-2.5 text-sm font-medium text-white hover:bg-teal-800 disabled:cursor-not-allowed disabled:opacity-60 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"
                 >
                     <span wire:loading.remove wire:target="register">Daftar sekarang</span>
                     <span wire:loading wire:target="register">Mendaftarkan...</span>

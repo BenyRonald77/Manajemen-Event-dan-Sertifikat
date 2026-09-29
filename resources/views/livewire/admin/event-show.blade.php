@@ -4,7 +4,7 @@
             <div>
                 <a href="{{ route('panitia.events.index') }}" wire:navigate class="text-sm text-slate-500 hover:text-slate-700">&larr; Kembali ke daftar acara</a>
                 <p class="mt-2 text-sm text-slate-600">
-                    {{ $event->starts_at->translatedFormat('d M Y, H:i') }} &mdash; {{ $event->ends_at->translatedFormat('d M Y, H:i') }}
+                    {{ $event->starts_at->translatedFormat('d M Y, H:i') }} hingga {{ $event->ends_at->translatedFormat('d M Y, H:i') }}
                     @if ($event->location)
                         &middot; {{ $event->location }}
                     @endif
@@ -47,7 +47,7 @@
                             wire:loading.attr="disabled"
                             wire:target="generateCertificates"
                             @if ($pendingCertificateCount === 0) disabled @endif
-                            class="shrink-0 rounded-md bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"
+                            class="inline-flex shrink-0 items-center justify-center rounded-md bg-teal-700 min-h-[44px] px-4 py-2 text-sm font-medium text-white hover:bg-teal-800 disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"
                         >
                             <span wire:loading.remove wire:target="generateCertificates">Generate Sertifikat ({{ $pendingCertificateCount }})</span>
                             <span wire:loading wire:target="generateCertificates">Memulai...</span>
@@ -77,7 +77,7 @@
                             </p>
                             <div class="mt-2 h-2 w-full overflow-hidden rounded-full bg-slate-200">
                                 <div
-                                    class="h-2 rounded-full bg-teal-600 transition-all"
+                                    class="h-2 rounded-full bg-teal-700 transition-all"
                                     style="width: {{ $batch->totalJobs > 0 ? round(($batch->processedJobs() / $batch->totalJobs) * 100) : 0 }}%"
                                 ></div>
                             </div>
@@ -120,7 +120,7 @@
                                         </td>
                                         <td class="px-4 py-2">
                                             @if (! $certificate)
-                                                <span class="text-xs text-slate-400">&mdash;</span>
+                                                <span class="text-xs text-slate-500">Belum ada</span>
                                             @elseif ($certificate->isGenerated())
                                                 <a href="{{ route('certificates.download', $certificate->verification_token) }}" class="text-teal-700 hover:text-teal-800">
                                                     Unduh {{ $certificate->certificate_number }}
@@ -128,7 +128,7 @@
                                             @elseif ($certificate->status === \App\Enums\CertificateStatus::Failed)
                                                 <span class="text-xs font-medium text-red-600">Gagal dibuat</span>
                                             @else
-                                                <span class="text-xs font-medium text-amber-600">Sedang diproses...</span>
+                                                <span class="text-xs font-medium text-amber-700">Sedang diproses...</span>
                                             @endif
                                         </td>
                                     </tr>

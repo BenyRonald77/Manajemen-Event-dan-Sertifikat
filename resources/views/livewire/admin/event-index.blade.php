@@ -6,7 +6,7 @@
                 <button
                     type="button"
                     wire:click="$set('showCreateForm', true)"
-                    class="inline-flex shrink-0 items-center rounded-md bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"
+                    class="inline-flex shrink-0 items-center rounded-md bg-teal-700 min-h-[44px] px-4 py-2 text-sm font-medium text-white hover:bg-teal-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"
                 >
                     Buat acara baru
                 </button>
@@ -63,7 +63,7 @@
                             type="submit"
                             wire:loading.attr="disabled"
                             wire:target="create"
-                            class="inline-flex items-center rounded-md bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-60"
+                            class="inline-flex items-center rounded-md bg-teal-700 min-h-[44px] px-4 py-2 text-sm font-medium text-white hover:bg-teal-800 disabled:cursor-not-allowed disabled:opacity-60"
                         >
                             <span wire:loading.remove wire:target="create">Simpan acara</span>
                             <span wire:loading wire:target="create">Menyimpan...</span>

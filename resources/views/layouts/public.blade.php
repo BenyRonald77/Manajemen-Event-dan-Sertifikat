@@ -15,11 +15,11 @@
     <body class="min-h-screen bg-slate-50 font-sans text-slate-900 antialiased">
         <div class="flex min-h-screen flex-col">
             <header class="border-b border-slate-200 bg-white">
-                <div class="mx-auto flex max-w-3xl items-center justify-between px-4 py-4 sm:px-6">
+                <div class="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-y-2 px-4 py-4 sm:px-6">
                     <a href="{{ route('home') }}" wire:navigate class="text-base font-semibold text-slate-900">
                         {{ config('app.name') }}
                     </a>
-                    <nav class="flex items-center gap-4 text-sm">
+                    <nav class="flex flex-wrap items-center justify-end gap-x-4 gap-y-1 text-sm">
                         <a href="{{ route('registrations.lookup') }}" wire:navigate class="text-slate-600 hover:text-slate-900">
                             Cek status pendaftaran
                         </a>

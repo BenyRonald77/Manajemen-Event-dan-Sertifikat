@@ -30,7 +30,7 @@
                     <dt class="text-slate-500">Tanggal acara</dt>
                     <dd class="text-slate-700">
                         {{ $certificate->registration->event->starts_at->translatedFormat('d M Y') }}
-                        &mdash; {{ $certificate->registration->event->ends_at->translatedFormat('d M Y') }}
+                        hingga {{ $certificate->registration->event->ends_at->translatedFormat('d M Y') }}
                     </dd>
                 </div>
                 <div>
@@ -45,7 +45,7 @@
 
             <a
                 href="{{ route('certificates.download', $certificate->verification_token) }}"
-                class="mt-6 inline-flex items-center rounded-md bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"
+                class="mt-6 inline-flex items-center rounded-md bg-teal-700 min-h-[44px] px-4 py-2 text-sm font-medium text-white hover:bg-teal-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"
             >
                 Unduh PDF
             </a>

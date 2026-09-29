@@ -35,7 +35,7 @@
             type="submit"
             wire:loading.attr="disabled"
             wire:target="search"
-            class="inline-flex w-full items-center justify-center rounded-md bg-teal-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-60 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"
+            class="inline-flex w-full items-center justify-center rounded-md bg-teal-700 min-h-[44px] px-4 py-2.5 text-sm font-medium text-white hover:bg-teal-800 disabled:cursor-not-allowed disabled:opacity-60 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"
         >
             <span wire:loading.remove wire:target="search">Cari pendaftaran</span>
             <span wire:loading wire:target="search">Mencari...</span>

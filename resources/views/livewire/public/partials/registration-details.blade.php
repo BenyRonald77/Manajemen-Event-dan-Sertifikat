@@ -1,7 +1,7 @@
 <div class="rounded-lg border border-slate-200 bg-white p-6 sm:p-8">
     <h2 class="text-xl font-semibold text-slate-900">{{ $registration->event->name }}</h2>
     <p class="mt-1 text-sm text-slate-600">
-        {{ $registration->event->starts_at->translatedFormat('d M Y, H:i') }} &mdash; {{ $registration->event->ends_at->translatedFormat('d M Y, H:i') }}
+        {{ $registration->event->starts_at->translatedFormat('d M Y, H:i') }} hingga {{ $registration->event->ends_at->translatedFormat('d M Y, H:i') }}
     </p>
     @if ($registration->event->location)
         <p class="text-sm text-slate-500">{{ $registration->event->location }}</p>
@@ -35,7 +35,7 @@
             </dl>
         </div>
         <div class="flex flex-col items-center justify-center rounded-lg border border-slate-200 bg-slate-50 p-4">
-            <div class="h-[220px] w-[220px]">{!! $qrSvg !!}</div>
+            <div class="w-full max-w-[220px] [&_svg]:h-auto [&_svg]:w-full">{!! $qrSvg !!}</div>
             <p class="mt-2 text-center text-xs text-slate-500">Tunjukkan QR ini saat check-in di lokasi acara</p>
         </div>
     </div>

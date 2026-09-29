@@ -15,7 +15,7 @@
                             <h2 class="text-lg font-semibold text-slate-900">{{ $event->name }}</h2>
                             <p class="mt-1 text-sm text-slate-600">
                                 {{ $event->starts_at->translatedFormat('d M Y, H:i') }}
-                                &mdash;
+                                hingga
                                 {{ $event->ends_at->translatedFormat('d M Y, H:i') }}
                             </p>
                             @if ($event->location)
@@ -34,7 +34,7 @@
                         <a
                             href="{{ route('events.register', $event) }}"
                             wire:navigate
-                            class="inline-flex shrink-0 items-center justify-center rounded-md bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"
+                            class="inline-flex shrink-0 items-center justify-center rounded-md bg-teal-700 min-h-[44px] px-4 py-2 text-sm font-medium text-white hover:bg-teal-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"
                         >
                             Daftar acara ini
                         </a>
