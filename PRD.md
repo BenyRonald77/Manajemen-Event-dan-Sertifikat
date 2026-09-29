@@ -67,28 +67,28 @@ Aplikasi ini menggantikan seluruh rangkaian proses tersebut dengan satu sistem: 
 
 ## 7. Kriteria Penerimaan per Fitur Inti
 
-### Fitur 1 — Pendaftaran
+### Fitur 1: Pendaftaran
 - [ ] Form publik per event bisa diisi tanpa login dan menyimpan data ke `registrations`.
 - [ ] `registration_code` yang dihasilkan unik (tidak pernah duplikat lintas semua pendaftaran).
 - [ ] Jika `quota` event terisi penuh, pendaftaran baru ditolak dengan pesan yang menyebut kuota penuh, dan tidak ada baris baru tersimpan.
 - [ ] Halaman konfirmasi menampilkan QR yang benar-benar berisi `registration_code` peserta tersebut (bisa dipindai ulang dan menghasilkan kode yang sama).
 - [ ] Peserta bisa membuka kembali QR/status pendaftarannya lewat pencarian email + kode pendaftaran, tanpa login.
 
-### Fitur 2 — Check-in QR
+### Fitur 2: Check-in QR
 - [ ] Hanya user yang login (staff/admin) yang bisa mengakses halaman scanner.
 - [ ] Memindai kode valid yang belum check-in: status berubah jadi `checked_in`, `checked_in_at` terisi.
 - [ ] Memindai kode yang sudah check-in: tidak mengubah `checked_in_at` semula, dan menampilkan pesan bahwa peserta ini sudah check-in beserta waktunya (idempotent).
 - [ ] Tersedia input manual kode sebagai fallback saat kamera tidak bisa dipakai, dengan hasil yang identik dengan hasil scan kamera.
 - [ ] Kode yang tidak dikenal menampilkan pesan "kode tidak ditemukan", bukan error mentah/500.
 
-### Fitur 3 — Generate sertifikat massal
+### Fitur 3: Generate sertifikat massal
 - [ ] Tombol "Generate Sertifikat" hanya memproses `registrations` dengan `status=checked_in`; peserta yang tidak check-in tidak mendapat baris `certificates`.
 - [ ] Proses generate mendispatch job ke queue (`Bus::batch`) dan dieksekusi oleh `php artisan queue:work`, bukan diproses sinkron di request HTTP (dibuktikan: halaman admin tetap responsif sebelum worker jalan, dan baris `certificates` baru berubah dari `pending` ke `generated` setelah worker memproses).
 - [ ] Halaman admin menampilkan progres batch (jumlah selesai dari total) yang bertambah secara live selama worker berjalan (via polling).
 - [ ] Setiap PDF yang berhasil dibuat memuat nama peserta, nama event, tanggal event, nomor sertifikat unik, dan QR yang mengarah ke URL verifikasi sertifikat tersebut.
 - [ ] Setelah batch selesai, admin bisa mengunduh tiap PDF yang berhasil dibuat langsung dari daftar sertifikat event.
 
-### Fitur 4 — Verifikasi publik
+### Fitur 4: Verifikasi publik
 - [ ] Token yang valid dan sertifikatnya sudah `generated` menampilkan nama peserta, event, nomor sertifikat, tanggal generate, dan status tervalidasi.
 - [ ] Token yang tidak ada di database menampilkan pesan "tidak ditemukan/tidak valid" yang jujur, tanpa data palsu apa pun.
 - [ ] Halaman ini bisa diakses tanpa login sama sekali.
