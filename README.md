@@ -1,58 +1,78 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Manajemen Event dan Sertifikat
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi internal untuk panitia event: pendaftaran peserta dengan QR, check-in di lokasi, generate sertifikat massal lewat antrean background job, dan halaman verifikasi keaslian sertifikat untuk publik.
 
-## About Laravel
+Latar belakang, alur lengkap, dan kriteria penerimaan tiap fitur ada di [`PRD.md`](PRD.md). Arah desain UI ada di [`DESIGN.md`](DESIGN.md).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Fitur
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Pendaftaran publik**: siapa pun bisa mendaftar ke sebuah acara tanpa login. Kuota event ditegakkan (pendaftaran ditolak jujur begitu penuh). Setelah daftar, peserta mendapat kode pendaftaran + QR, dan bisa membuka kembali lewat halaman "cek status pendaftaran" (email + kode).
+- **Check-in QR**: staf/panitia (login) memindai QR peserta lewat kamera perangkat (pakai [html5-qrcode](https://github.com/mebjas/html5-qrcode)), dengan input manual sebagai cadangan jika kamera tidak tersedia. Memindai kode yang sudah check-in menampilkan info jujur "sudah check-in sebelumnya", tidak dianggap error maupun sukses palsu.
+- **Generate sertifikat massal**: panitia klik "Generate Sertifikat" pada halaman acara. Hanya peserta yang sudah check-in yang dibuatkan sertifikat. Satu job PDF per peserta dikirim ke antrean lewat `Bus::batch()`, benar-benar diproses di background oleh `php artisan queue:work`, bukan sinkron di request. Progres batch (X/Y selesai) tampil live di halaman admin.
+- **Verifikasi publik**: `/sertifikat/verifikasi/{token}` bisa dibuka siapa saja tanpa login. Token valid dan sertifikat sudah jadi -> tampil "ASLI dan valid" + tombol unduh PDF. Token tidak dikenal -> tampil jujur "tidak ditemukan", tidak pernah sukses palsu.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Kebutuhan sistem
 
-## Learning Laravel
+- PHP 8.4, Composer 2.x
+- Node.js + npm
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+QR code digenerate sebagai SVG (lewat `simplesoftwareio/simple-qrcode`), jadi tidak butuh ekstensi tambahan seperti Imagick.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Instalasi
 
 ```bash
-composer require laravel/boost --dev
+composer install
+npm install
 
-php artisan boost:install
+cp .env.example .env
+php artisan key:generate
+
+# database sqlite lokal (untuk deployment sungguhan lihat blok MySQL
+# yang dikomentari di .env.example)
+touch database/database.sqlite
+
+php artisan migrate --seed
+npm run build
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## Menjalankan aplikasi
 
-## Contributing
+Butuh **dua proses berjalan bersamaan**:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+# proses 1: web server
+php artisan serve
 
-## Code of Conduct
+# proses 2: worker antrean -- WAJIB berjalan, karena generate sertifikat
+# diproses secara asynchronous lewat antrean, bukan langsung saat diklik
+php artisan queue:work
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Tanpa `php artisan queue:work` berjalan, klik "Generate Sertifikat" akan membuat baris sertifikat berstatus "Sedang diproses..." yang tidak akan pernah selesai karena job-nya menumpuk di tabel `jobs` dan tidak ada yang mengeksekusi.
 
-## Security Vulnerabilities
+Untuk pengembangan sehari-hari, `composer run dev` menjalankan server, queue listener, dan Vite sekaligus dalam satu proses (memakai `php artisan dev`), jadi tidak perlu membuka tiga terminal terpisah.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Kredensial demo
 
-## License
+Seeder (`php artisan migrate --seed`) membuat satu akun panitia demo:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- **Email**: `panitia@kampus.test`
+- **Password**: `password`
+
+Ini kredensial untuk lingkungan pengembangan/demo saja, bukan untuk produksi. Seeder juga membuat dua acara contoh (satu sudah selesai dengan beberapa peserta yang sudah check-in, siap untuk dicoba generate sertifikatnya; satu akan datang, siap untuk dicoba pendaftarannya) beserta nama peserta yang sepenuhnya sintetis (bukan orang sungguhan).
+
+## Menjalankan test
+
+```bash
+php artisan test
+```
+
+Mencakup: kuota pendaftaran ditegakkan, check-in QR idempotent, generate sertifikat hanya untuk peserta check-in, dan halaman verifikasi membedakan token valid/tidak valid secara jujur.
+
+## Struktur alur singkat
+
+1. Peserta daftar di `/acara/{event}/daftar` -> dapat kode + QR.
+2. Panitia check-in peserta di `/panitia/checkin` (scan atau ketik manual).
+3. Setelah acara selesai, panitia buka `/panitia/acara/{event}` dan klik "Generate Sertifikat".
+4. `php artisan queue:work` memproses job satu per satu, PDF tersimpan, progres tampil live di halaman.
+5. Siapa pun bisa memverifikasi sertifikat di `/sertifikat/verifikasi/{token}` dan mengunduh PDF-nya dari halaman yang sama.
